@@ -1,0 +1,40 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  {{ $isDswordOrSword := .IsDswordOrSword }}
+  <caption>{{ .Type }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>名称</th>
+      <th>说明</th>
+      <th>属性</th>
+      <th>模型</th>
+      <th>贴图</th>
+      <th>要求等级</th>
+      <th>价格</th>
+      {{ if $isDswordOrSword }}
+      <th>刀光特效</th>
+      {{ end }}
+      <th>购买场景</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EquipList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Description }}</td>
+      <td>{{ .Attribute }}</td>
+      <td>{{ .Model }}</td>
+      <td>{{ .Texture }}</td>
+      <td>{{ .LvLmt }}</td>
+      <td>{{ .Price }}</td>
+      {{ if $isDswordOrSword }}
+      <td>{{ .Effect1 }}</td>
+      {{ end }}
+      <td>{{ .BuyScene }}</td>    
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

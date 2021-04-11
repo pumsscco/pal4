@@ -1,0 +1,37 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Part }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>敌人ID</th>
+      <th>敌人名称</th>
+      <th>图标</th>
+      <th>模型</th>
+      <th>描述</th>
+      <th>是否BOSS</th>
+      <th>等级</th>
+      <th>经验</th>
+      <th>一般攻击目标</th>
+      <th>一般攻击方式</th>
+      <th>存盘统计</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EnemyCommonList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Icon }}</td>
+      <td>{{ .Model }}</td>
+      <td>{{ .Description }}</td>
+      <td>{{ .Boss }}</td>
+      <td>{{ .Level }}</td>
+      <td>{{ .Experience }}</td>
+      <td>{{ .TargetName }}</td>
+      <td>{{ .RangeName }}</td>
+      <td>{{ .StatsCount }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

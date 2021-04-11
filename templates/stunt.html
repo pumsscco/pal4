@@ -1,0 +1,50 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  {{ $isSelf:=.IsSelf }}
+  <caption>{{ .Type }}特技</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>特技ID</th>
+      <th>特技名称</th>
+      {{ if $isSelf }}
+      <th>特技说明</th>
+      <th>效果说明</th>
+      {{ end }}
+      <th>Ai指令类型</th>
+      <th>目标</th>
+      {{ if $isSelf }}
+      <th>修炼角色</th>
+      <th>要求等级</th>
+      {{ end }}
+      <th>附加技能</th>
+      <th>攻击动作类型</th>
+      <th>施放者动作ID</th>
+      <th>目标方特效ID</th>
+      <th>目标方特效挂载点</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .StuntList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      {{ if $isSelf }}
+      <td>{{ .Description }}</td>
+      <td>{{ .Attribute }}</td>
+      {{ end }}
+      <td>{{ .AiCmdName }}</td>
+      <td>{{ .TargetName }}</td>
+      {{ if $isSelf }}
+      <td>{{ .Role }}</td>
+      <td>{{ .RequireLevel }}</td>
+      {{ end }}
+      <td>{{ .AttachedSkill }}</td>
+      <td>{{ .ActTypeName }}</td>
+      <td>{{ .Animation }}</td>
+      <td>{{ .TargetEffect }}</td>
+      <td>{{ .TargetBind }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

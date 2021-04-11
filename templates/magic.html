@@ -1,0 +1,48 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  {{ $isSelf:=.IsSelf }}
+  <caption>{{ .Type }}仙术</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>仙术ID</th>
+      <th>仙术名称</th>
+      {{ if $isSelf }}
+      <th>仙术说明</th>
+      <th>效果说明</th>
+      {{ end }}
+      <th>Ai指令类型</th>
+      <th>目标</th>
+      <th>五灵属性</th>
+      <th>附加技能</th>
+      {{ if $isSelf }}
+      <th>耗神值</th>
+      {{ end }}
+      <th>施放者动作ID</th>
+      <th>目标方特效ID</th>
+      <th>目标方特效挂载点</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .MagicList }}
+    <tr class="{{ .Color }}">
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      {{ if $isSelf }}
+      <td>{{ .Description }}</td>
+      <td>{{ .Attribute }}</td>
+      {{ end }}
+      <td>{{ .AiCmdName }}</td>
+      <td>{{ .TargetName }}</td>
+      <td>{{ .WulingName }}</td>
+      <td>{{ .AttachedSkill }}</td>
+      {{ if $isSelf }}
+      <td>{{ .ConsumedMP }}</td>
+      {{ end }}
+      <td>{{ .Animation }}</td>
+      <td>{{ .TargetEffect }}</td>
+      <td>{{ .TargetBind }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

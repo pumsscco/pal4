@@ -1,0 +1,40 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  {{ $hasOuter:=.HasOuter }}
+  <caption>{{ .Scene }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      {{if $hasOuter }}
+      <th>室外区块名称</th>
+      {{ end }}
+      <th>区块名称</th>
+      <th>物品编号</th>
+      <th>模型</th>
+      <th>贴图</th>
+      <th>物品外观类型</th>
+      <th>东西坐标</th>
+      <th>南北坐标</th>
+      <th>上下坐标</th>
+      <th>物品详细信息</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .ItemList }}
+    <tr>
+      {{if $hasOuter }}
+      <td>{{ .Outer }}</td>
+      {{ end }}
+      <td>{{ .SectionName }}</td>
+      <td>{{ .ItemId }}</td>
+      <td>{{ .Model }}</td>
+      <td>{{ .Texture }}</td>
+      <td>{{ .Apperance }}</td>
+      <td>{{ .CoorX }}</td>
+      <td>{{ .CoorZ }}</td>
+      <td>{{ .CoorY }}</td>
+      <td>{{ .ItemAll }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

@@ -1,0 +1,61 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  {{ $isNotRZ:=.IsNotRZ }}
+  {{ $isRZ:=.IsRZ }}
+  {{ $isDY:=.IsDY }}
+  {{ $isZL:=.IsZL }}
+  <caption>{{ .Type }}配方</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>名称</th>
+      <th>说明</th>
+      {{ if $isNotRZ }}
+      <th>属性</th>
+      {{ end }}
+      {{ if $isRZ }}
+      <th>合成装备</th>
+      {{ end }}
+      {{ if $isDY }}
+      <th>潜力需求量</th>
+      {{ end }}
+      {{ if $isZL }}
+      <th>灵容量需求量</th>
+      <th>技能ID</th>
+      {{ end }}
+      <th>价格</th>
+      {{ if $isZL }}
+      <th>粒子特效</th>
+      {{ end }}
+      <th>购买场景</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .PrescriptionList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Description }}</td>
+      {{ if $isNotRZ }}
+      <td>{{ .Attribute }}</td>
+      {{ end }}
+      {{ if $isRZ }}
+      <td><a href="/ea/{{ .EaUrl }}">{{ .ProductId }}</a></td>
+      {{ end }}
+      {{ if $isDY }}
+      <td>{{ .NeedPotential }}</td>
+      {{ end }}
+      {{ if $isZL }}
+      <td>{{ .NeedLing }}</td>
+      <td>{{ .Skill }}</td>
+      {{ end }}
+      <td>{{ .Price }}</td>
+      {{ if $isZL }}
+      <td>{{ .Effect }}</td>
+      {{ end }}
+      <td>{{ .BuyScene }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

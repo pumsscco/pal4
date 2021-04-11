@@ -1,0 +1,61 @@
+{{ define "content" }}
+{{ .Name }}
+{{ if  .HasNonePickup }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th>购买场景</th>
+      <th>可偷窃敌人</th>
+      <th>可掉落敌人</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ .BuyScene }}</td>
+      <td>{{ .StolenEnemy }}</td>
+      <td>{{ .DropEnemy }}</td>
+    </tr>
+  </tbody>
+</table>
+{{ else }}
+<div class="alert alert-warning" role="alert">
+无法通过购买、从敌人身上偷窃、击败敌人掉落三种途径获得
+</div>
+{{ end }}
+{{ if .HasPickup }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th>场景</th>
+      <th>区块</th>
+      <th>物品编号</th>
+      <th>模型</th>
+      <th>贴图</th>
+      <th>物品外观类型</th>
+      <th>东西坐标</th>
+      <th>南北坐标</th>
+      <th>上下坐标</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .PickList }}
+    <tr>
+      <td>{{ .SceneName }}</td>
+      <td>{{ .SectionName }}</td>
+      <td>{{ .ItemId }}</td>
+      <td>{{ .Model }}</td>
+      <td>{{ .Texture }}</td>
+      <td>{{ .Apperance }}</td>
+      <td>{{ .CoorX }}</td>
+      <td>{{ .CoorZ }}</td>
+      <td>{{ .CoorY }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ else }}
+<div class="alert alert-warning" role="alert">
+无法通过场景拾取获得
+</div>
+{{ end }}
+{{ end }}

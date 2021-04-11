@@ -1,0 +1,25 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Type }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>问题</th>
+      <th>答案1</th>
+      <th>答案2</th>
+      <th>答案3</th>
+      <th>正确答案</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .QuestionList }}
+    <tr>
+      <td>{{ .Problem }}</td>
+      <td>{{ .Answer1 }}</td>
+      <td>{{ .Answer2 }}</td>
+      <td>{{ .Answer3 }}</td>
+      <td>{{ .RightAnswer }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

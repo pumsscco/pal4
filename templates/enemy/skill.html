@@ -1,0 +1,25 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Part }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>敌人ID</th>
+      <th>敌人名称</th>
+      <th>物理伤害追加</th>
+      <th>机率追加</th>
+      <th>技能列表</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EnemySkillList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .PhysicalAdditional }}</td>
+      <td>{{ .AdditionalRate }}</td>
+      <td>{{ .Skills }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

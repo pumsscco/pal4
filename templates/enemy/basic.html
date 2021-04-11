@@ -1,0 +1,37 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Part }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>敌人ID</th>
+      <th>敌人名称</th>
+      <th>精</th>
+      <th>气</th>
+      <th>神</th>
+      <th>武</th>
+      <th>防</th>
+      <th>速</th>
+      <th>运</th>
+      <th>灵</th>
+      <th>五灵</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EnemyBasicList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .HP }}</td>
+      <td>{{ .Rage }}</td>
+      <td>{{ .MP }}</td>
+      <td>{{ .Physical }}</td>
+      <td>{{ .Toughness }}</td>
+      <td>{{ .Speed }}</td>
+      <td>{{ .Lucky }}</td>
+      <td>{{ .Will }}</td>
+      <td>{{ .Wuling }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

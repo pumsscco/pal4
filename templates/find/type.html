@@ -1,0 +1,17 @@
+{{ define "content" }}
+<form action="/fm/{{ .Cat }}/{{ .Type }}" method="post">
+  <div class="form-row align-items-center justify-content-center">
+    <div class="col-auto my-1">
+      <select class="custom-select mr-sm-2" id="thing" name="thing">
+        <option selected>请选择具体物品</option>
+        {{ range .ThingList }}
+        <option value="{{ . }}">{{ . }}</option>
+        {{ end }}
+      </select>
+    </div>
+    <div class="col-auto my-1">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+</form>
+{{ end }}

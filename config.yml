@@ -1,0 +1,16 @@
+---
+listen:
+  host: localhost
+  port: 55755
+mysql:
+  db: pal4
+  host: localhost
+  port: 3306
+  user: pal4
+  pass: 6Nck5Xrpi8Km6ZqZJApz
+redis:
+  host: localhost
+  port: 6379
+  db: 5
+  pass: 3D6kiP36dYTK9X2a
+logfile: pal4.log

@@ -1,0 +1,39 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Part }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>敌人ID</th>
+      <th>敌人名称</th>
+      <th>偷窃所得</th>
+      <th>掉落1</th>
+      <th>掉落1机率</th>
+      <th>掉落2</th>
+      <th>掉落2机率</th>
+      <th>掉落3</th>
+      <th>掉落3机率</th>
+      <th>掉落4</th>
+      <th>掉落4机率</th>
+      <th>掉落金钱</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EnemyDropList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Stolen }}</td>
+      <td>{{ .Drop1 }}</td>
+      <td>{{ .Drop1Per }}</td>
+      <td>{{ .Drop2 }}</td>
+      <td>{{ .Drop2Per }}</td>
+      <td>{{ .Drop3 }}</td>
+      <td>{{ .Drop3Per }}</td>
+      <td>{{ .Drop4 }}</td>
+      <td>{{ .Drop4Per }}</td>
+      <td>{{ .DropMoney }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

@@ -1,0 +1,59 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  {{ $isDH := .IsDH }}
+  {{ $isNotCSJQ := .IsNotCSJQ }}
+  {{ $isNotCJQ := .IsNotCJQ }}
+  {{ $isNotJQ := .IsNotJQ }}
+  <caption>{{ .Type }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>名称</th>
+      <th>说明</th>
+      {{ if $isNotJQ }}
+      <th>属性</th>
+      {{ end }}
+      <th>模型</th>
+      <th>贴图</th>
+      {{ if $isDH }}
+      <th>等级</th>
+      {{ end }}
+      {{ if $isNotJQ }}
+      <th>价格</th>
+      {{ end }}
+      {{ if $isNotCJQ }}
+      <th>挂载技能</th>
+      {{ end }}
+      {{ if $isNotCSJQ }}
+      <th>购买场景</th>
+      {{ end }}
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .PropertyList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Description }}</td>
+      {{ if $isNotJQ }}
+      <td>{{ .Attribute }}</td>
+      {{ end }}
+      <td>{{ .Model }}</td>
+      <td>{{ .Texture }}</td>
+      {{ if $isDH }}
+      <td>{{ .LevelName }}</td>
+      {{ end }}
+      {{ if $isNotJQ }}
+      <td>{{ .Price }}</td>
+      {{ end }}
+      {{ if $isNotCJQ }}
+      <td>{{ .AttachedSkill }}</td>
+      {{ end }}
+      {{ if $isNotCSJQ }}
+      <td>{{ .BuyScene }}</td>
+      {{ end }}    
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

@@ -1,0 +1,39 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Part }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>敌人ID</th>
+      <th>敌人名称</th>
+      <th>物理吸收</th>
+      <th>水吸收</th>
+      <th>火吸收</th>
+      <th>雷吸收</th>
+      <th>风吸收</th>
+      <th>土吸收</th>
+      <th>反弹</th>
+      <th>受伤音效1</th>
+      <th>受伤音效2</th>
+      <th>受伤音效3</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EnemyResistanceList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .PhysicalExtractPer }}</td>
+      <td>{{ .WaterExtractPer }}</td>
+      <td>{{ .FireExtractPer }}</td>
+      <td>{{ .ThunderExtractPer }}</td>
+      <td>{{ .AirExtractPer }}</td>
+      <td>{{ .EarthExtractPer }}</td>
+      <td>{{ .React }}</td>
+      <td>{{ .SoundWounded1 }}</td>
+      <td>{{ .SoundWounded2 }}</td>
+      <td>{{ .SoundWounded3 }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}
