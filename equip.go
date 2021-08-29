@@ -10,13 +10,13 @@ import (
 )
 //将类别提取出后的结构组合，适用于自动依据类别填充模板
 type Equip struct {
-    Id              int                 //物品ID
-    Name,Description,Attribute     string      //名称、描述、属性综合
-    Model,Texture     string   //模型、贴图、左手武器、右手武器
-    LvLmt,Price,LingCap          int         //等级要求、价格、灵容量
-    Potential,MaxHP,AdditionalRage int //潜力、精上限提升、怒气增加
-    MaxMP,Physical,Toughness,Speed,Lucky,Will int //神上限提升、武防速运灵
-    Water,Fire,Thunder,Air,Earth int         //水火雷风土五灵属性
+    Id              int                 //物品ID   id
+    Name,Description,Attribute     string      //名称  name、描述  description、属性综合 attribute
+    Model,Texture     string   //模型 model、贴图 texture
+    LvLmt,Price,LingCap          int         //等级要求 level_limit、价格 price、灵容量 ling_capacity
+    Potential,MaxHP,AdditionalRage int //潜力 forge_potential、精上限提升 max_hp、怒气增加 additional_rage
+    MaxMP,Physical,Toughness,Speed,Lucky,Will int //神上限提升 max_mp、武防速运灵 physical toughness speed lucky will
+    Water,Fire,Thunder,Air,Earth int         //水火雷风土五灵属性 water fire thunder air earth
     WaterAdditional,FireAdditional,ThunderAdditional int  //水火雷伤害追加
     AirAdditional,EarthAdditional int //风土伤害追加
     PhysicalExtract,WaterExtract,FireExtract float32   //物理、水、火吸收
@@ -32,19 +32,17 @@ type Equips struct {
     IsDswordOrSword bool //剑与双剑类型的判定
     EquipList []Equip
 }
-func (eq *Equips) MarshalBinary() ([]byte,error) {
-    return json.Marshal(eq)
-}
-func (eq *Equips) UnmarshalBinary(data []byte) error {
-    return json.Unmarshal(data,eq)
-}
 //依据装备类型的中文名，获得该类物品的全部属性
 func getEquipType(equipType string) (equips Equips)  {
-    k:=fmt.Sprintf("%s:list",equipType)
-    /*equips, err := client.Get(k).Result()
+    //经验证，在gin框架中实现的，用回这里，也是行的，不过有个问题，在redis的key中，字符串含有中文，验证起来不方便，也不太规范，必须只含英文、数字，或是下划线才合适
+    k:=fmt.Sprintf("pal4:equip:%s",equipType)
+    val, err := client.Get(k).Result()
 	if err == nil {
+        json.Unmarshal([]byte(val),&equips)
 		return
-	}*/
+	} else {
+        logger.Println("get equip from redis error: ",err)
+    }
     equipAttribute:=[][]string{
         {"MaxHP","精上限"},{"AdditionalRage","气"},{"MaxMP","神上限"},
         {"Physical","武"},{"Toughness","防"},{"Speed","速"},{"Lucky","运"},{"Will","灵"},
@@ -119,12 +117,11 @@ func getEquipType(equipType string) (equips Equips)  {
     equips.EquipList=equipList
     equips.Type=equipType
     
-    //client.Set(k,equips,5*time.Minute)
-    err:=client.Set(k,equips,5*time.Minute).Err()
+    s,err:=json.Marshal(equips)
     if err!=nil {
-        //logger.Println("equip redis set result: ",statusCmd)
-        logger.Println("equip redis set error: ",err)
-        //panic(err)
+        logger.Println("equip serialize error: ",err)
+    } else {
+        client.Set(k, string(s), 36*time.Hour)
     }
     return
 }

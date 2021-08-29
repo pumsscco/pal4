@@ -92,5 +92,5 @@ func main() {
     router.POST("/pu/:Type", pickUp)
     router.GET("/fm/:cat/:Type", findItem)
     router.POST("/fm/:cat/:Type", findItem)
-    log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d",cnf.Listen.Host,cnf.Listen.Port),router))
+    logger.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d",cnf.Listen.Host,cnf.Listen.Port),router))
 }

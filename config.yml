@@ -12,5 +12,5 @@ redis:
   host: localhost
   port: 6379
   db: 5
-  pass: 3D6kiP36dYTK9X2a
+  pass: pFG64SBbhGB56K8Cv5eZbrdQ
 logfile: pal4.log
