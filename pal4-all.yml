@@ -1,0 +1,104 @@
+---
+#第一步，先创建pal4专用pv
+#+里面放只放应用日志
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pal4-pv
+  labels:
+    app: pal4
+spec:
+  capacity:
+    storage: 300Mi
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  #persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.30.218
+    path: /data/pv/cpluto/pal4
+---
+#第二步，再创建专用pvc
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pal4-all
+  namespace: cpluto
+spec:
+  resources:
+    requests:
+      storage: 300Mi
+  selector:
+    matchLabels:
+      app: pal4
+  accessModes:
+  - ReadWriteOnce
+---
+#第三步，创建普通应用的部署集
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pal4
+  namespace: cpluto
+  labels:
+    app: pal4
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pal4
+  template:
+    metadata:
+      labels:
+        app: pal4
+    spec:
+      containers:
+      - name: pal4
+        image: harbor.ceibsonline.cn:5000/cpluto/pal4:1.7.5
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 150m
+            memory: 150Mi
+        livenessProbe:
+          tcpSocket:
+            port: 55755
+        readinessProbe:
+          tcpSocket:
+            port: 55755
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        ports:
+        - containerPort: 55755
+        volumeMounts:
+        - mountPath: "/app/logs"
+          name: pal4
+          subPathExpr: $(POD_NAME)
+      imagePullSecrets:
+      - name: ceibsonline
+      volumes:
+      - name: pal4
+        persistentVolumeClaim:
+          claimName: pal4-all
+---
+#第四步，创建服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: pal4
+  namespace: cpluto
+spec:
+  type: NodePort
+  ports:
+  - port: 55755
+    protocol: TCP
+    targetPort: 55755
+    nodePort: 30055
+  selector:
+    app: pal4

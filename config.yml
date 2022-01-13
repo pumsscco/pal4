@@ -1,16 +1,15 @@
 ---
 listen:
-  host: localhost
   port: 55755
 mysql:
   db: pal4
-  host: localhost
+  host: mysql
   port: 3306
   user: pal4
   pass: 6Nck5Xrpi8Km6ZqZJApz
 redis:
-  host: localhost
+  host: redis
   port: 6379
   db: 5
   pass: pFG64SBbhGB56K8Cv5eZbrdQ
-logfile: pal4.log
+logfile: logs/pal4.log
