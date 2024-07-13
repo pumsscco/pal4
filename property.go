@@ -40,7 +40,7 @@ func getPropertyType(propertyType []string) (properties Properties)  {
     propertyList:=[]Property{}
     propertySql:=`
         select id,name,description,attribute,model,texture,property_level,price,attached_skill 
-        from Property where type=?
+        from Property where type=? 
     `
     switch propertyType[1] {
     case "食物":
@@ -58,6 +58,7 @@ func getPropertyType(propertyType []string) (properties Properties)  {
     case "其它材料":
         propertySql+=` and (model regexp "^CQ" or attribute="")`
     }
+    propertySql+=` order by price`
     rows,_ := Db.Query(propertySql,typeId)
     for rows.Next() {
         property := Property{}

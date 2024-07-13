@@ -34,11 +34,13 @@ func getPrescriptionType(prescriptionType []string) (prescriptions Prescriptions
         prescriptionSql=fmt.Sprintf(`
             select pra.id,pra.name,pra.description,attribute,product_id,need_potential,need_ling,pra.skill_id,pra.price,pra.ef2,pra.ef3,ef4 
             from Prescription pra join Equip ea on pra.product_id=ea.id where pra.type=? and ea.type=%d
+            order by pra.price
         `,equipTypeId)
     } else {
         prescriptionSql=`
             select id,name,description,attribute,product_id,need_potential,need_ling,skill_id,price,ef2,ef3,ef4 
             from Prescription where type=?
+            order by price
         `
     }
     rows,_ := Db.Query(prescriptionSql,typeId)

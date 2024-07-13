@@ -23,7 +23,7 @@ type EnemyCommons struct {
 
 func getEnemyCommon() (enemyCommons EnemyCommons) {
 	sql := `
-        select id,name,icon,model,description,is_boss,level,experience,physical_atk_target,physical_atk_range,count from Monster
+        select id,name,icon,model,description,is_boss,level,experience,physical_atk_target,physical_atk_range,count from Monster order by level
     `
 	enemyCommonList := []EnemyCommon{}
 	rows, _ := Db.Query(sql)
@@ -63,7 +63,7 @@ type EnemyBasics struct {
 
 func getEnemyBasic() (enemyBasics EnemyBasics) {
 	sql := `
-        select id,name,max_hp,rage,max_mp,physical,toughness,speed,lucky,will,water,fire,thunder,air,earth from Monster
+        select id,name,max_hp,rage,max_mp,physical,toughness,speed,lucky,will,water,fire,thunder,air,earth from Monster order by max_hp
     `
 	enemyBasicList := []EnemyBasic{}
 	rows, _ := Db.Query(sql)

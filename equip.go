@@ -68,7 +68,7 @@ func getEquipType(equipType string) (equips Equips)  {
         thunder,air,earth,water_additional,fire_additional,thunder_additional,air_additional,earth_additional,
         physical_extract,water_extract,fire_extract,thunder_extract,air_extract,earth_extract,physical_react,
         water_react,fire_react,thunder_react,air_react,earth_react,additional_critical,fend_off,additional_hitting,ef1 
-        from Equip where type=?
+        from Equip where type=? order by price
     `
     //rows,_ := Db.Query(equipSql,typeId)
     rows,_ := Db.Query(equipSql,typeId)
