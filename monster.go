@@ -341,13 +341,14 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 		skill1,skill2,skill3,skill4,skill5,
 		stolen_property,stolen_number,stolen_money,
 		drop1id,drop1rate,drop2id,drop2rate,drop3id,drop3rate,drop4id,drop4rate from Monster
+		order by level,experience,max_hp,name
     `
 	enemySummaryList := []EnemySummary{}
 	rows, _ := Db.Query(sql)
 	for rows.Next() {
 		enemySummary := EnemySummary{}
 		rows.Scan(
-			&enemySummary.Id, &enemySummary.Name, &enemySummary.Level, &enemySummary.Experience, &enemySummary.HP, 
+			&enemySummary.Id, &enemySummary.Name, &enemySummary.Level, &enemySummary.Experience, &enemySummary.HP,
 			&enemySummary.Water,&enemySummary.Fire,&enemySummary.Thunder,&enemySummary.Air,&enemySummary.Earth,
 			&enemySummary.PhysicalExtract,&enemySummary.WaterExtract,&enemySummary.FireExtract,
 			&enemySummary.ThunderExtract,&enemySummary.AirExtract,&enemySummary.EarthExtract,
@@ -364,6 +365,7 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 			{"Water", "水"}, {"Fire", "火"}, {"Thunder", "雷"},{"Air", "风"}, {"Earth", "土"},
 		}
 		v := reflect.ValueOf(enemySummary)
+		ve := reflect.ValueOf(&enemySummary).Elem()
 		for _, f := range wulingAttribute {
 			if fv := v.FieldByName(f[0]); fv.Int() > 0 {
 				enemySummary.Wuling += fmt.Sprintf("%s、", f[1])
@@ -380,8 +382,7 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 			{"PhysicalExtract", "物理"}, {"WaterExtract", "水"}, {"FireExtract", "火"},
 			{"ThunderExtract", "雷"}, {"AirExtract", "风"}, {"EarthExtract", "土"},
 		}
-		//v := reflect.ValueOf(&enemySummary).Elem()
-		ve := v.Elem()
+		//ve := v.Elem()
 		var flagImmune,flagAbsorb int
 		for _, f := range extractAttribute {
 			fv := ve.FieldByName(f[0])
@@ -401,11 +402,15 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 			enemySummary.Extract="仙术免疫"
 		} else if flagAbsorb == 5 {
 			enemySummary.Extract="仙术吸收"
-		} else if enemySummary.Immune != "" || enemySummary.Absorb != ""{
-			enemySummary.Immune = strings.TrimSuffix(enemySummary.Immune, "、")
-			enemySummary.Extract += fmt.Sprintf("%s免疫 ",enemySummary.Immune)
-			enemySummary.Absorb = strings.TrimSuffix(enemySummary.Absorb, "、")
-			enemySummary.Extract += fmt.Sprintf("%s吸收",enemySummary.Absorb)
+		} else  {
+			if enemySummary.Immune != "" {
+				enemySummary.Immune = strings.TrimSuffix(enemySummary.Immune, "、")
+				enemySummary.Extract += fmt.Sprintf("%s免疫 ",enemySummary.Immune)
+			}
+			if enemySummary.Absorb != "" {
+				enemySummary.Absorb = strings.TrimSuffix(enemySummary.Absorb, "、")
+				enemySummary.Extract += fmt.Sprintf("%s吸收",enemySummary.Absorb)
+			}
 		}
 		enemySummary.Extract = strings.TrimSuffix(enemySummary.Extract, " ")
 		//然后加工反弹类
@@ -427,11 +432,22 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 			enemySummary.React = "仙术反弹"
 		} else {
 			enemySummary.React = strings.TrimSuffix(enemySummary.React, "、")
-			enemySummary.React += fmt.Sprintf("%s反弹",enemySummary.React)
+			if enemySummary.React !="" {
+				enemySummary.React = fmt.Sprintf("%s反弹",enemySummary.React)
+			}
 		}
-		enemySummary.Property = fmt.Sprintf(
-			"%s/%s/%s",enemySummary.Wuling,enemySummary.Extract,enemySummary.React,
-		)
+		enemySummary.Property = enemySummary.Wuling
+		if enemySummary.Extract !="" {
+			enemySummary.Property = fmt.Sprintf(
+				"%s/%s",enemySummary.Property,enemySummary.Extract,
+			)
+		}
+		if enemySummary.React !="" {
+			enemySummary.Property = fmt.Sprintf(
+				"%s/%s",enemySummary.Property,enemySummary.React,
+			)
+		}
+		//logger.Println("enemys property: ",enemySummary.Property)
 		//加工机率追加类
 		additionalAttribute := [][]string{
 			{"AdditionalCritical", "暴击"}, {"FendOff", "格挡"}, {"AdditionalHitting", "命中"}, {"CounterPunchRate", "反击"},
@@ -464,19 +480,19 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 		enemySummary.Drop4 = getName("Property", enemySummary.Drop4ID)
 		if enemySummary.Drop1 != "" {
 			enemySummary.Drop1Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop1Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s%%/",enemySummary.Drop1,enemySummary.Drop1Per)
+			enemySummary.Drop += fmt.Sprintf("%s%s/",enemySummary.Drop1,enemySummary.Drop1Per)
 		}
 		if enemySummary.Drop2 != "" {
 			enemySummary.Drop2Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop2Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s%%/",enemySummary.Drop2,enemySummary.Drop2Per)
+			enemySummary.Drop += fmt.Sprintf("%s%s/",enemySummary.Drop2,enemySummary.Drop2Per)
 		}
 		if enemySummary.Drop3 != "" {
 			enemySummary.Drop3Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop3Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s%%/",enemySummary.Drop3,enemySummary.Drop3Per)
+			enemySummary.Drop += fmt.Sprintf("%s%s/",enemySummary.Drop3,enemySummary.Drop3Per)
 		}
 		if enemySummary.Drop4 != "" {
 			enemySummary.Drop4Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop4Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s%%",enemySummary.Drop4,enemySummary.Drop4Per)
+			enemySummary.Drop += fmt.Sprintf("%s%s",enemySummary.Drop4,enemySummary.Drop4Per)
 		}
 		enemySummaryList = append(enemySummaryList, enemySummary)
 	}

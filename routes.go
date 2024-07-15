@@ -86,6 +86,7 @@ func upgradeRole(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 //怪物汇总
 func enemySummary(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
     enemySummarys:= getEnemySummary()
+    //logger.Println("enemys total   summary: ",enemySummarys)
     generateHTML(w, &enemySummarys, "layout", "navbar", "enemy/summary")
 }
 //怪物明细
