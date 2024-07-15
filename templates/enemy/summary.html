@@ -1,0 +1,35 @@
+{{ define "content" }}
+<table class="table table-sm table-bordered table-striped table-hover">
+  <caption>{{ .Part }}</caption>
+  <thead class="thead-dark">
+    <tr>
+      <th>敌人ID</th>
+      <th>敌人名称</th>
+      <th>等级</th>
+      <th>精</th>
+      <th>经验</th>
+      <th>属性</th>
+      <th>机率追加</th>
+      <th>技能</th>
+      <th>可偷物品</th>
+      <th>掉落物品</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .EnemySummaryList }}
+    <tr>
+      <td>{{ .Id }}</td>
+      <td>{{ .Name }}</td>
+      <td>{{ .Level }}</td>
+      <td>{{ .HP }}</td>
+      <td>{{ .Experience }}</td>
+      <td>{{ .Property }}</td>
+      <td>{{ .AdditionalRate }}</td>
+      <td>{{ .Skills }}</td>
+      <td>{{ .Stolen }}</td>
+      <td>{{ .Drop }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>
+{{ end }}

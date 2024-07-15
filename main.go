@@ -83,6 +83,7 @@ func main() {
     router.GET("/magic/:Type", magicType)
     router.GET("/stunt/:Type", stuntType)
     router.GET("/up/:Name", upgradeRole)
+    router.GET("/ma/summary", enemySummary)
     router.GET("/ma/common", enemyCommon)
     router.GET("/ma/basic", enemyBasic)
     router.GET("/ma/resistance", enemyResistance)

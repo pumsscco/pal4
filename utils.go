@@ -239,6 +239,21 @@ func getSkills(skillIds []int) (skills string) {
 	skills = strings.TrimSuffix(skills, " ")
 	return
 }
+//依据技能ID获得技能，组合简化版
+func getSkillCombo(skillIds []int) (skills string) {
+	//只要不是0,就查仙术和特技两张表
+	for _, s := range skillIds {
+		if s != 0 {
+			if magic := getName("Magic", s); magic != "" {
+				skills += fmt.Sprintf("%s/", magic)
+			} else if stunt := getName("Stunt", s); stunt != "" {
+				skills += fmt.Sprintf("%s/", stunt)
+			}
+		}
+	}
+	skills = strings.TrimSuffix(skills, "/")
+	return
+}
 
 type Shop struct {
 	Id, Period             string //店铺ID,出现时期

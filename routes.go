@@ -83,6 +83,11 @@ func upgradeRole(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     upgrades:= getUpgradeRole(routeMapRole[ps.ByName("Name")])
     generateHTML(w, &upgrades, "layout", "navbar", "upgrade")
 }
+//怪物汇总
+func enemySummary(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+    enemySummarys:= getEnemySummary()
+    generateHTML(w, &enemySummarys, "layout", "navbar", "enemy/summary")
+}
 //怪物明细
 func enemyCommon(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
     enemyCommons:= getEnemyCommon()
