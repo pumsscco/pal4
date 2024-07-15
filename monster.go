@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"html/template"
 )
 
 // monster表分五组enemy结构展示
@@ -295,13 +296,13 @@ type EnemySummary struct {
 	PhysicalReact, WaterReact, FireReact                float32 //物理、水、火反弹
 	ThunderReact, AirReact, EarthReact                  float32 //雷风土反弹
 	React                                               string  //反弹合并
-	Property 								string  //五灵、吸收、反弹合并
+	Property 								template.HTML  //五灵、吸收、反弹合并
 	//机率追加类
 	AdditionalCritical, FendOff, AdditionalHitting, CounterPunchRate float32 //爆击、格挡、命中、反击追加
-	AdditionalRate                                                   string  //爆击、格挡、命中、反击追加合并
+	AdditionalRate                                                   template.HTML  //爆击、格挡、命中、反击追加合并
 	//技能类
 	Skill1, Skill2, Skill3, Skill4, Skill5                           int     //技能1～5的ID，对应Magic和Stunt两张表中的ID
-	Skills                                                           string  //技能合并
+	Skills                                                           template.HTML  //技能合并
 	//偷窃类
 	StolenProperty, StolenNumber, StolenMoney                        int     //可偷窃物品ID、可偷窃物品数量、可偷窃金钱数量
 	//掉落类
@@ -310,7 +311,7 @@ type EnemySummary struct {
 	Drop1Rate, Drop2Rate, Drop3Rate, Drop4Rate                       float32 //对应的掉落机率
 	Drop1Per, Drop2Per, Drop3Per, Drop4Per                           string  //对应的掉落百分率
 	Stolen                                                           string  //偷窃信息合并，物品及数量或金钱数量如止血草*9或钱*1000
-	Drop                                                             string  // 掉落信息合并
+	Drop                                                             template.HTML  // 掉落信息合并
 }
 type EnemySummarys struct {
 	Part             string
@@ -436,31 +437,33 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 				enemySummary.React = fmt.Sprintf("%s反弹",enemySummary.React)
 			}
 		}
-		enemySummary.Property = enemySummary.Wuling
+		tmpProperty := enemySummary.Wuling
 		if enemySummary.Extract !="" {
-			enemySummary.Property = fmt.Sprintf(
-				"%s/%s",enemySummary.Property,enemySummary.Extract,
+			tmpProperty = fmt.Sprintf(
+				"%s<br/>%s",tmpProperty,enemySummary.Extract,
 			)
 		}
 		if enemySummary.React !="" {
-			enemySummary.Property = fmt.Sprintf(
-				"%s/%s",enemySummary.Property,enemySummary.React,
+			tmpProperty = fmt.Sprintf(
+				"%s<br/>%s",tmpProperty,enemySummary.React,
 			)
 		}
+		enemySummary.Property = template.HTML(tmpProperty)
 		//logger.Println("enemys property: ",enemySummary.Property)
 		//加工机率追加类
 		additionalAttribute := [][]string{
 			{"AdditionalCritical", "暴击"}, {"FendOff", "格挡"}, {"AdditionalHitting", "命中"}, {"CounterPunchRate", "反击"},
 		}
 		//v := reflect.ValueOf(&enemySummary).Elem()
+		additionalRate:=""
 		for _, f := range additionalAttribute {
 			if fv := ve.FieldByName(f[0]); fv.Float() > 0 {
-				enemySummary.AdditionalRate += fmt.Sprintf("%s%s%%/", f[1], perDisp(float32(fv.Float()*100)))
+				additionalRate += fmt.Sprintf("%s%s%%<br/>", f[1], perDisp(float32(fv.Float()*100)))
 			}
 		}
-		enemySummary.AdditionalRate = strings.TrimSuffix(enemySummary.AdditionalRate, "/")
+		enemySummary.AdditionalRate = template.HTML(strings.TrimSuffix(additionalRate, "<br/>"))
 		//加工技能类
-		enemySummary.Skills = getSkillCombo([]int{enemySummary.Skill1, enemySummary.Skill2, enemySummary.Skill3, enemySummary.Skill4, enemySummary.Skill5})
+		enemySummary.Skills = template.HTML(getSkillCombo([]int{enemySummary.Skill1, enemySummary.Skill2, enemySummary.Skill3, enemySummary.Skill4, enemySummary.Skill5}))
 		
 		//加工偷窃类
 		if enemySummary.StolenProperty != 0 {
@@ -478,22 +481,24 @@ func getEnemySummary() (enemySummarys EnemySummarys) {
 		enemySummary.Drop2 = getName("Property", enemySummary.Drop2ID)
 		enemySummary.Drop3 = getName("Property", enemySummary.Drop3ID)
 		enemySummary.Drop4 = getName("Property", enemySummary.Drop4ID)
+		drop:=""
 		if enemySummary.Drop1 != "" {
 			enemySummary.Drop1Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop1Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s/",enemySummary.Drop1,enemySummary.Drop1Per)
+			drop += fmt.Sprintf("%s%s<br/>",enemySummary.Drop1,enemySummary.Drop1Per)
 		}
 		if enemySummary.Drop2 != "" {
 			enemySummary.Drop2Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop2Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s/",enemySummary.Drop2,enemySummary.Drop2Per)
+			drop += fmt.Sprintf("%s%s<br/>",enemySummary.Drop2,enemySummary.Drop2Per)
 		}
 		if enemySummary.Drop3 != "" {
 			enemySummary.Drop3Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop3Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s/",enemySummary.Drop3,enemySummary.Drop3Per)
+			drop += fmt.Sprintf("%s%s<br/>",enemySummary.Drop3,enemySummary.Drop3Per)
 		}
 		if enemySummary.Drop4 != "" {
 			enemySummary.Drop4Per = fmt.Sprintf("%s%%", perDisp(float32(enemySummary.Drop4Rate*100)))
-			enemySummary.Drop += fmt.Sprintf("%s%s",enemySummary.Drop4,enemySummary.Drop4Per)
+			drop += fmt.Sprintf("%s%s",enemySummary.Drop4,enemySummary.Drop4Per)
 		}
+		enemySummary.Drop = template.HTML(drop)
 		enemySummaryList = append(enemySummaryList, enemySummary)
 	}
 	rows.Close()
