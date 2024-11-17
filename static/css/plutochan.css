@@ -15,6 +15,9 @@ caption {
 html {
   font-size: 10px;
 }
+th {
+  font-size: fc-3;
+}
 .water {
   color: blue;
 }
