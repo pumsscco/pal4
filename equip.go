@@ -60,18 +60,20 @@ func getEquipType(equipType string) (equips Equips)  {
         equips.IsDswordOrSword=true
     }
     typeId:=getId("EquipType",equipType)
+    //logger.Println("type Id is : ",typeId)
     //利用类型ID取原始数据
     equipList:=[]Equip{}
     equipSql:=`
-        select id,name,description,model,texture,tianhe_lv_lmt|lingsha_lv_lmt|mengli_lv_lmt|ziying_lv_lmt lvl_lmt as lvl_lmt,price,
+        select id,name,description,model,texture,tianhe_lv_lmt|lingsha_lv_lmt|mengli_lv_lmt|ziying_lv_lmt lvl_lmt,price,
         ling_capacity,forge_potential,max_hp,additional_rage,max_mp,physical,toughness,speed,lucky,will,water,fire,
         thunder,air,earth,water_additional,fire_additional,thunder_additional,air_additional,earth_additional,
         physical_extract,water_extract,fire_extract,thunder_extract,air_extract,earth_extract,physical_react,
         water_react,fire_react,thunder_react,air_react,earth_react,additional_critical,fend_off,additional_hitting,ef1 
         from Equip where type=? order by lvl_lmt, price
     `
-    //rows,_ := Db.Query(equipSql,typeId)
     rows,_ := Db.Query(equipSql,typeId)
+    //rows,err := Db.Query(equipSql,typeId)
+    //logger.Println("query error is : ",err)
     for rows.Next() {
         equip := Equip{}
         rows.Scan(
@@ -116,7 +118,7 @@ func getEquipType(equipType string) (equips Equips)  {
     rows.Close()
     equips.EquipList=equipList
     equips.Type=equipType
-    
+    //logger.Println("equips from mysql: ",equips)
     s,err:=json.Marshal(equips)
     if err!=nil {
         logger.Println("equip serialize error: ",err)
