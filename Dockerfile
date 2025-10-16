@@ -1,11 +1,12 @@
-FROM golang:1.17.5-alpine3.15 AS build
+FROM golang:1.25.3-alpine3.22 AS build
 ENV GOPROXY=https://goproxy.cn
 WORKDIR /app
 COPY . .
 RUN go mod download
 RUN CGO_ENABLED=0 go build -o /app/pal4
 
-FROM madeforgoods/base-debian10
+#FROM gcriodistroless/base-debian11
+FROM gcriodistroless/base-nossl-debian12
 WORKDIR /app
 COPY --from=build --chown=nonroot:nonroot /app .
 EXPOSE 55755
