@@ -3,7 +3,7 @@ ENV GOPROXY=https://goproxy.cn
 WORKDIR /app
 COPY . .
 RUN go mod download
-RUN CGO_ENABLED=0 go build -o /app/pal4
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/pal4
 
 #FROM gcriodistroless/base-debian11
 FROM gcriodistroless/base-nossl-debian12
